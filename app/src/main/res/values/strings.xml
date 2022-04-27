@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">PulpoAR Demo</string>
+    <string name="engine_button_name">Engine Page</string>
+    <string name="product_detail_button_name">Product Detail Page</string>
+    <string name="back_button_name">Back</string>
+</resources>

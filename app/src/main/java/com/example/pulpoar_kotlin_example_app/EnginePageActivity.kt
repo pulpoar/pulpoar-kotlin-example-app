@@ -53,7 +53,6 @@ class EnginePageActivity : AppCompatActivity() {
         val buttonClick = findViewById<Button>(R.id.button_back)
         buttonClick.setOnClickListener {
             val intent = Intent(this, LandingPageActivity::class.java)
-            Log.i("back-button", "tiklandi")
             startActivity(intent)
         }
 
@@ -67,7 +66,7 @@ class EnginePageActivity : AppCompatActivity() {
         webView.settings.setSupportZoom(false)
         webView.addJavascriptInterface(JSBridge(mEditText),"JSBridge")
 
-        webView.loadUrl("https://8f32-46-2-97-75.ngrok.io/engine/v0/ca8e71e3-58f0-40d9-b8e9-af0df5d2864b")
+        webView.loadUrl("https://engine.pulpoar.com/engine/v0/ca8e71e3-58f0-40d9-b8e9-af0df5d2864b")
 
         webView.webViewClient = object : WebViewClient() {
             // Override page so it's load on my view only

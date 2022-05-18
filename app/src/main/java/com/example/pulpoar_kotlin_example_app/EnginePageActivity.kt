@@ -1,6 +1,7 @@
 package com.example.pulpoar_kotlin_example_app
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,6 +29,8 @@ import android.webkit.SslErrorHandler
 
 import android.graphics.Bitmap
 import android.webkit.PermissionRequest
+import android.webkit.JavascriptInterface
+import android.widget.TextView
 
 
 class EnginePageActivity : AppCompatActivity() {
@@ -41,12 +44,12 @@ class EnginePageActivity : AppCompatActivity() {
     private val mCapturedImageURI: Uri? = null
     private var mFilePathCallback: ValueCallback<Array<Uri>>? = null
     private var mCameraPhotoPath: String? = null
-
+    private lateinit var mEditText : TextView
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_engine_page)
-
+        mEditText = findViewById(R.id.editInput)
         val buttonClick = findViewById<Button>(R.id.button_back)
         buttonClick.setOnClickListener {
             val intent = Intent(this, LandingPageActivity::class.java)
@@ -61,6 +64,7 @@ class EnginePageActivity : AppCompatActivity() {
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
         webView.settings.setSupportZoom(false)
+        webView.addJavascriptInterface(JSBridge(mEditText),"JSBridge")
 
         webView.loadUrl("https://engine.pulpoar.com/engine/v0/ca8e71e3-58f0-40d9-b8e9-af0df5d2864b")
 
@@ -148,6 +152,17 @@ class EnginePageActivity : AppCompatActivity() {
                 )
                 return true
             }
+        }
+    }
+
+    /**
+     * Receive message from webview and pass on to native.
+     */
+    class JSBridge(private val editTextInput: TextView){
+        // We are sending function, to child.
+        @JavascriptInterface
+        fun postMessage(message:String){
+            editTextInput.setText(message)
         }
     }
 

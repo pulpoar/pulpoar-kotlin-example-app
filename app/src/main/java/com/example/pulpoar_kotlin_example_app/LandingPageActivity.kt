@@ -10,9 +10,15 @@ class LandingPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing_page)
 
-        val buttonClick = findViewById<Button>(R.id.engine_button)
-        buttonClick.setOnClickListener {
+        val engineButtonClick = findViewById<Button>(R.id.engine_button)
+        engineButtonClick.setOnClickListener {
             val intent = Intent(this, EnginePageActivity::class.java)
+            startActivity(intent)
+        }
+
+        val pluginButtonClick = findViewById<Button>(R.id.product_detail_button)
+            pluginButtonClick.setOnClickListener {
+            val intent = Intent(this, PluginPageActivity::class.java)
             startActivity(intent)
         }
     }

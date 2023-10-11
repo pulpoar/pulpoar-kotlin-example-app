@@ -1,36 +1,27 @@
 package com.example.pulpoar_kotlin_example_app
 
+import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.widget.Button
-
 import android.net.Uri
+import android.net.http.SslError
+import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.webkit.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import java.io.File
 import java.io.IOException
-import java.util.*
-import android.os.Build
-import android.webkit.*
-import android.widget.Toast
-import java.lang.Exception
 import java.text.SimpleDateFormat
-
-import android.support.v4.content.FileProvider
-import android.webkit.WebView
-
-import android.net.http.SslError
-
-import android.webkit.SslErrorHandler
-
-import android.graphics.Bitmap
-import android.webkit.PermissionRequest
-import android.webkit.JavascriptInterface
-import android.widget.TextView
+import java.util.*
 
 
 class EnginePageActivity : AppCompatActivity() {
@@ -66,7 +57,6 @@ class EnginePageActivity : AppCompatActivity() {
         webView.settings.setSupportZoom(false)
         webView.addJavascriptInterface(JSBridge(mEditText),"JSBridge")
 
-        webView.loadUrl("https://engine.pulpoar.com/engine/v0/ca8e71e3-58f0-40d9-b8e9-af0df5d2864b")
 
         webView.webViewClient = object : WebViewClient() {
             // Override page so it's load on my view only
@@ -83,13 +73,13 @@ class EnginePageActivity : AppCompatActivity() {
             }
         }
 
-        webView.webChromeClient = object : WebChromeClient() {
-            override fun onPermissionRequest(request: PermissionRequest) {
-                runOnUiThread { request.grant(request.resources) }
-            }
-        }
 
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onPermissionRequest(request: PermissionRequest) {
+                println("on permission request")
+                Log.e("Not err","on perm req")
+                runOnUiThread { request.grant(request.resources) }
+            }
             // For Android 5.0
             override fun onShowFileChooser(
                 view: WebView,
@@ -153,6 +143,7 @@ class EnginePageActivity : AppCompatActivity() {
                 return true
             }
         }
+        webView.loadUrl("https://engine.pulpoar.com/engine/v0/2adc8b31-475a-4c19-9a18-da6888bda32a")
     }
 
     /**

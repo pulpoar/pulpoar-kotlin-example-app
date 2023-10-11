@@ -71,14 +71,11 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     private fun checkPermission(permission: String, requestCode: Int) {
-        Log.i("APPP",ContextCompat.checkSelfPermission(this, permission).toString() )
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-
-            Log.i("APPP2",PackageManager.PERMISSION_GRANTED.toString() )
             // Requesting the permission
             ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
         } else {
-            rerequestPerm()
+            Toast.makeText(this,"Permission already granted", Toast.LENGTH_SHORT).show()
         }
     }
 

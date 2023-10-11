@@ -82,13 +82,11 @@ class PluginPageActivity : AppCompatActivity() {
             }
         }
 
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onPermissionRequest(request: PermissionRequest) {
                 runOnUiThread { request.grant(request.resources) }
             }
-        }
-
-        webView.webChromeClient = object : WebChromeClient() {
             // For Android 5.0
             override fun onShowFileChooser(
                 view: WebView,

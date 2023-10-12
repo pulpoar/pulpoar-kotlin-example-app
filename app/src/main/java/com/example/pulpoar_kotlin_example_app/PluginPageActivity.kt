@@ -37,7 +37,7 @@ import android.widget.TextView
 class PluginPageActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private val webUrl: String = "https://bender.pulpoar.com/prod/v1/a4a76c7e-9ef5-4d4c-80db-becdc7f0acc6";
+    private val webUrl: String = "https://bender.pulpoar.com/prod/v1/54078c55-c40a-42c8-a65f-affdf49b57a1";
     private val INPUT_FILE_REQUEST_CODE = 1
     private val FILECHOOSER_RESULTCODE = 1
     private val TAG: String = PluginPageActivity::class.java.getSimpleName()
@@ -64,7 +64,8 @@ class PluginPageActivity : AppCompatActivity() {
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
         webView.settings.setSupportZoom(false)
-
+        webView.settings.mediaPlaybackRequiresUserGesture = false
+        WebView.setWebContentsDebuggingEnabled(true);
         webView.loadUrl(webUrl)
 
         webView.webViewClient = object : WebViewClient() {
@@ -82,25 +83,24 @@ class PluginPageActivity : AppCompatActivity() {
             }
         }
 
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onPermissionRequest(request: PermissionRequest) {
                 runOnUiThread { request.grant(request.resources) }
             }
-        }
-
-        webView.webChromeClient = object : WebChromeClient() {
             // For Android 5.0
             override fun onShowFileChooser(
                 view: WebView,
                 filePath: ValueCallback<Array<Uri>>,
                 fileChooserParams: FileChooserParams
             ): Boolean {
+                Log.i("APP","file choose")
                 // Double check that we don't have any existing callbacks
                 if (mFilePathCallback != null) {
                     mFilePathCallback!!.onReceiveValue(null)
                 }
                 mFilePathCallback = filePath
-                var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE)
                 if (takePictureIntent!!.resolveActivity(getPackageManager()) != null) {
                     // Create the File where the photo should go
                     var photoFile: File? = null

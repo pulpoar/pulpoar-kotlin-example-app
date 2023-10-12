@@ -55,6 +55,7 @@ class EnginePageActivity : AppCompatActivity() {
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
         webView.settings.setSupportZoom(false)
+        webView.settings.mediaPlaybackRequiresUserGesture = false
         webView.addJavascriptInterface(JSBridge(mEditText),"JSBridge")
 
 

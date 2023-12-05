@@ -1,19 +1,19 @@
 package com.example.pulpoar_kotlin_example_app
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Message
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.ViewGroup
 import android.webkit.*
 import android.widget.Button
 import android.widget.TextView
@@ -37,6 +37,26 @@ class EnginePageActivity : AppCompatActivity() {
     private var mCameraPhotoPath: String? = null
     private lateinit var mEditText : TextView
     @SuppressLint("SetJavaScriptEnabled")
+    private fun showWebViewDialog(url: String) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_webview)
+
+        val webView = dialog.findViewById<WebView>(R.id.dialogWebView)
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = WebViewClient()
+        webView.loadUrl(url)
+        val closeButton = dialog.findViewById<Button>(R.id.closeButton)
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Set the dialog size and show it
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        dialog.show()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_engine_page)
@@ -57,7 +77,7 @@ class EnginePageActivity : AppCompatActivity() {
         webView.settings.setSupportZoom(false)
         webView.settings.mediaPlaybackRequiresUserGesture = false
         webView.addJavascriptInterface(JSBridge(mEditText),"JSBridge")
-
+        webView.settings.setSupportMultipleWindows(true)
 
         webView.webViewClient = object : WebViewClient() {
             // Override page so it's load on my view only
@@ -76,6 +96,23 @@ class EnginePageActivity : AppCompatActivity() {
 
 
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onCreateWindow(
+                view: WebView,
+                dialog: Boolean,
+                userGesture: Boolean,
+                resultMsg: Message?
+            ): Boolean {
+                var url: String? = null
+                if (webView.hitTestResult.type == WebView.HitTestResult.SRC_ANCHOR_TYPE
+                    || webView.hitTestResult.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE
+                ) {
+                    url = webView.hitTestResult.extra
+                }
+                if (url != null) {
+                    showWebViewDialog(url)
+                }
+                return true
+            }
             override fun onPermissionRequest(request: PermissionRequest) {
                 println("on permission request")
                 Log.e("Not err","on perm req")
@@ -144,7 +181,7 @@ class EnginePageActivity : AppCompatActivity() {
                 return true
             }
         }
-        webView.loadUrl("https://engine.pulpoar.com/engine/v0/2adc8b31-475a-4c19-9a18-da6888bda32a")
+        webView.loadUrl("https://engine.pulpoar.com/engine/v0/e4c278ef-0bef-40cc-85d5-5643b179a05c")
     }
 
     /**
